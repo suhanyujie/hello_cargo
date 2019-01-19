@@ -12,4 +12,5 @@
 
 
 ## 参考资料
+* 社区电子书 https://kaisery.github.io/trpl-zh-cn/
 * https://medium.com/@devashishdxt/building-a-command-line-todo-app-in-rust-a89bb7af91c3

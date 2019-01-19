@@ -25,10 +25,15 @@ enum Message {
 }
 
 fn main() -> Result<()> {
-    let x = copyDeeply();
+    let mut s1 = String::from("who are u.|");
+    //let (x,y) = multipleReturnVal(s1);
+    //let x = reference_example(&s1);
+    mutable_ref_example(&mut s1);
 
-    dbg!(x);
+    // debug变量的宏
+    dbg!(s1);
 
+    // todo list命令行版
     if false {
         handle(Command::from_args());
     }
@@ -42,6 +47,21 @@ fn main() -> Result<()> {
     // if false {
     //     guess_number();
     // }
+}
+
+fn mutable_ref_example(s:&mut String){
+    s.push_str("this is append text...\n");
+}
+
+//借用和引用
+fn reference_example(s:&String)->usize{
+    s.len()
+}
+
+// 多返回值问题
+fn multipleReturnVal(s:String)->(String, usize){
+    let x = s.len();
+    (s, x)
 }
 
 // 多个字符串的复制（深拷贝）
