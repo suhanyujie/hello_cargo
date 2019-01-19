@@ -25,7 +25,14 @@ enum Message {
 }
 
 fn main() -> Result<()> {
-    handle(Command::from_args())
+    let x = copyDeeply();
+
+    dbg!(x);
+
+    if false {
+        handle(Command::from_args());
+    }
+    Ok(())
 
     // let y = {
     //     let x = 1;
@@ -35,6 +42,23 @@ fn main() -> Result<()> {
     // if false {
     //     guess_number();
     // }
+}
+
+// 多个字符串的复制（深拷贝）
+fn copyDeeply() {
+    let x = String::from("who are u.....");
+    let x1 = x.clone();
+    println!("the return value is:{}\n", x);
+    println!("the return value is:{}\n", x1);
+}
+
+//语句和表达式的区别 
+fn five()->i32{
+    // 语句
+    let a = 5+5;
+    println!("a value is {}\n", a);
+    // 表达式
+    5+4
 }
 
 // fn guess_number() {
