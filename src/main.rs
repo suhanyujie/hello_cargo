@@ -25,13 +25,18 @@ enum Message {
 }
 
 fn main() -> Result<()> {
-    let mut s1 = String::from("who are u.|");
+    let s1 = String::from("who are u.|");
     //let (x,y) = multipleReturnVal(s1);
     //let x = reference_example(&s1);
-    mutable_ref_example(&mut s1);
+    // mutable_ref_example(&mut s1);
+    //let s1_1 = ownership_change();
+    //about_slice();
+    //let s2 = first_word(&s1);
+    let s3 = s1;
+    slice_show(&s3);
 
     // debug变量的宏
-    dbg!(s1);
+    println!("{}",s3);
 
     // todo list命令行版
     if false {
@@ -49,7 +54,55 @@ fn main() -> Result<()> {
     // }
 }
 
+fn slice_show(s: &str) {
+    let my_str1 = String::from("this is a slice example..");
+    let word1 = &my_str1[..];
+    let my_str2 = "this is another string ...";
+    let word1 = first_word2(my_str2);
+    println!("{}", word1);
+}
+
+//eg:传入字符串slice，返回字符串slice slice是字符串的部分引用
+fn first_word2(s:&str)->&str{
+    let bytes = s.as_bytes();
+    for (i,&item) in bytes.iter().enumerate()  {
+        if item == b' ' {
+            return &s[0..i]
+        }
+    }
+    &s[..]
+}
+
+fn first_word(s:&String)->&str{
+    let bytes = s.as_bytes();
+    for (i,&item) in bytes.iter().enumerate()  {
+        if item == b' ' {
+            return &s[0..i]
+        }
+    }
+    &s[..]
+}
+
+// slice
+fn about_slice(){
+    let s1 = String::from("hello world!");
+    let s1_1 = &s1[0..5];
+    let s1_2 = &s1[4..];
+    let s1_3 = &s1[4..];
+    dbg!(s1_1);
+    dbg!(s1_2);
+    dbg!(s1_3);
+}
+
+// 所有权移出当前函数
+fn ownership_change()->String{
+    let s1 = String::from("this is a string...");
+    s1
+}
+
+// 可变引用
 fn mutable_ref_example(s:&mut String){
+    //改变字符串 
     s.push_str("this is append text...\n");
 }
 
