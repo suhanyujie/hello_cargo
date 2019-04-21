@@ -10,6 +10,8 @@
 * `todos/counter.todo`这个文件包含了最新使用的主键id，它是为了给新创建的事项分配一个唯一的id，当新增一个事项时，会将这个数组递增并存入这个文件中。
 * 无论何时，用户标记事项已经完成是，将会将事项从`todos/pending.todo`中移除，并将其写入到`todos/completed.todo`文件中，`todos/completed.todo`中包含了所有的已完成事项的数组。
 
+## 知识点
+
 
 ## 参考资料
 * 社区电子书 https://kaisery.github.io/trpl-zh-cn/
