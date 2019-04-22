@@ -1,4 +1,10 @@
 ## 知识点
+### build
+* `rustc src/study/ownership.rs -o a.out`
+
+### run
+* `./a.out`
+
 ### 所有权
 * 在堆上创建字符串：`let str1 = String::from("hello world")`
 
