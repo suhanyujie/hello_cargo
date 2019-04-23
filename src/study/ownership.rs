@@ -5,11 +5,6 @@ fn main() {
     // let res = get_first_word(&s);
     // println!("{}", res);
 
-    // string_slice();
-
-    println!("{}", get_first_word(&s));;
-}
-
 fn calculate_length(s: &String) -> usize {
     s.len()    
 }
@@ -25,6 +20,18 @@ fn get_first_word_size(s: &String) -> usize {
     }
 
     s.len()
+}
+
+// 可变引用
+fn ref_mutable(){
+    let mut s1 = String::from("hello1");
+    calculate_length(&s1);
+    {
+        let s2 = &s1;
+        s2 = s2 + "123";
+        println!("{}",s2);
+    }
+    println!("{}",s1);
 }
 
 // 字符串slice
@@ -59,6 +66,7 @@ fn get_first_word(s: &String) -> &str {
     * 值有且只有一个所有者。
     * 当所有者（变量）离开作用域，这个值将被丢弃。
 * 变量的所有权总是遵循相同的模式：将值赋给另一个变量时移动它。当持有堆中数据值的变量离开作用域时，其值将通过 drop 被清理掉，除非数据被移动为另一个变量所有。
+* 不能在拥有不可变引用的同时拥有可变引用。
 
 ## 引用和借用
 * 可以使用大括号来创建一个新的作用域，以允许拥有多个可变引用，只是不能 同时 拥有
