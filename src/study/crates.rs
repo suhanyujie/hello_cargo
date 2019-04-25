@@ -53,6 +53,9 @@ use std::fmt::Result;
 use std::io::Result as IoResult;
 ```
 
+* 使用glob运算符将一个路径下所有公有项引入作用域，例如：`use std::collections::*;`
+
+
 
 
 
