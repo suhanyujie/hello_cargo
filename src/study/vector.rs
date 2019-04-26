@@ -1,6 +1,9 @@
+
+
 fn main() {
     let mut v = vec![12,21,43];
     // 遍历数组
+    println!("\n遍历数组:");
     for i in &v {
         println!("{}", i)
     }
@@ -11,13 +14,29 @@ fn main() {
         Some(val) => println!("This is val:{}", val),
         None => println!("This is None"),
     }
-    println!("{:#?}", v.get(1));
+    println!("{:?}", v.get(1));
     // 修改数组单元
-    for (index,val) in &mut v {
+    println!("\n修改数组单元后，打印结果:");
+    for val in &mut v {
         *val = *val + 1;
-        println!("{}", index);
     }
-    println!("{:#?}", v);
+    println!("{:?}", v);
+
+    // 通过枚举向数组中存放不同类型的值
+    println!("\n通过枚举向数组中存放不同类型的值:");
+    #[derive(Debug)]
+    enum Enum1 {
+        Int1(i32),
+        Float1(f64),
+        Text2(String),
+    }
+    let mut v = vec![
+        Enum1::Int1(12)
+    ];
+    v.push(Enum1::Text2(String::from("hello i'm String")));
+    for i in &v {
+        println!("{:#?}", i)
+    }
 }
 
 /*
@@ -65,6 +84,12 @@ for i in &v {
 }
 ```
 
+### 通过枚举向数组中存放不同类型的值
+* 定义一个枚举，其成员会存放这些不同类型的值，同时所有这些枚举成员都会被当作相同类型，那个枚举的类型。如下：
+
+```
+
+```
 
 
 
