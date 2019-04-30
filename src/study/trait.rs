@@ -208,10 +208,9 @@ fn largest_in_fancy<T:Copy+PartialOrd>(list:&[T]) -> T {
 ## blacket implementation
 * 对任何满足特定`trait bound`的类型实现trait的这种行为被称为`blanket implementation`
 
-
 ## 注意事项
 * trait在实现时，签名要和声明trait时的签名保持一致，包括参数声明
-
+* 还有一种泛型，我们一直在使用它甚至都没有察觉它的存在，这就是 生命周期（lifetimes）。---在Rust中，生命周期是一种泛型
 
 
 */
