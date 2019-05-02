@@ -2,3 +2,5 @@
 **/*.rs.bk
 /todos/*
 /a.out
+/.idea
+/src/study/test_note/target
