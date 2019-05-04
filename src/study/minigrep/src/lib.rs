@@ -10,18 +10,27 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new(args:&[String]) -> Result<Config, &'static str> {
-        if args.len() < 3 {
-            return Err("not enough arguments");
-        }
-        let query = &args[1];
-        let filename = &args[2];
+    pub fn new(mut args: env::Args) -> Result<Config, &'static str> {
+        args.next();
+        let query = match args.next() {
+            Some(query) => query,
+            None => return Err("Didn't get a query string"),
+        };
+        let filename = match args.next() {
+            Some(filename) => filename,
+            None => return Err("Didn't get a file name"),
+        };
+        // if args.len() < 3 {
+        //     return Err("not enough arguments");
+        // }
+        // let query = &args[1];
+        // let filename = &args[2];
         // env::var 函数并传递我们需要寻找的环境变量名称，CASE_INSENSITIVE。env::var 返回一个 Result，它在环境变量被设置时返回包含其值的 Ok 成员，并在环境变量未被设置时返回 Err 成员。
         // 如果CASE_INSENSITIVE 环境变量被设置为任何值，is_err 会返回 false 并将进行大小写不敏感搜索。
         let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
         Ok(Config {
-            query:query.clone(),
-            filename:filename.clone(),
+            query:query,
+            filename:filename,
             case_sensitive:case_sensitive,
         })
     }
@@ -31,7 +40,7 @@ pub fn run(config:Config) -> Result<(), Box<dyn Error>>{
     // 读取文件
     let content = fs::read_to_string(&config.filename)?;
     if config.case_sensitive {
-        for line in search(&config.query, &content) {
+        for line in search_by_iterator(&config.query, &content) {
             println!("{:?}", line);
         }
     } else {
@@ -63,6 +72,13 @@ fn search_case_insensitive<'a>(query:&str, content:&'a str) -> Vec<&'a str> {
         }
     }
     result
+}
+
+// 使用迭代器的方式搜索
+fn search_by_iterator<'a>(query:&str,content: &'a str) ->Vec<&'a str> {
+    content.lines()
+            .filter(|line| line.contains(query))
+            .collect()
 }
 
 #[cfg(test)]
