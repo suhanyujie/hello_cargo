@@ -1,5 +1,12 @@
 fn main() {
-    
+    // 使用Box存放数据
+    get_a_box();
+}
+
+// 定义一个 Box
+fn get_a_box(){
+    let a = Box::new(5);
+    println!("{}", a);
 }
 
 
