@@ -1,4 +1,4 @@
-use std::rc::Rc;
+use std::rc::{Rc, Weak};
 use std::cell::RefCell;
 
 /**
@@ -9,6 +9,10 @@ fn main() {
 
     // 结合 Rc 和 RefCell 的实例
     tests::combine_rc_and_refcell();
+    
+    leaf_01();
+    // 打印 强引用计数和弱引用计数做对比
+    show_weak_count();
 }
 
 pub trait Messager {
@@ -104,6 +108,70 @@ pub mod tests {
     }
 }
 
+/*
+## Weak<T> 的相关实例
+*/
+#[derive(Debug)]
+struct Node01 {
+    value:i32,
+    children: RefCell<Vec<Rc<Node01>>>,
+}
+fn no_leaf () {
+    let leaf = Rc::new(Node01 {
+        value:3,
+        children:RefCell::new(vec![]),
+    });
+    let branch = Rc::new(Node01{
+        value:5,
+        children:RefCell::new(vec![Rc::clone(&leaf)]),
+    });
+    // 此时，可以通过 branch 取到 leaf 中的 Node01
+    // 但无法通过 leaf 获取到 branch 的 Node01 信息
+    // 为了使子结点知道其父结点，需要在 Node01 结构体定义中增加一个 parent 字段
+}
+#[derive(Debug)]
+struct Node02 {
+    value: i32,
+    parent: RefCell<Weak<Node02>>,
+    children: RefCell<Vec<Rc<Node02>>>,
+}
+
+fn leaf_01(){
+    let leaf = Rc::new(Node02 {
+        value:3,
+        parent: RefCell::new(Weak::new()),
+        children:RefCell::new(vec![]),
+    });
+    println!("leaf parent = {:?}", leaf.parent.borrow().upgrade());
+    let branch = Rc::new(Node02{
+        value:5,
+        parent: RefCell::new(Weak::new()),
+        children:RefCell::new(vec![Rc::clone(&leaf)]),
+    });
+    *leaf.parent.borrow_mut() = Rc::downgrade(&branch);
+    println!("leaf parent = {:?}", leaf.parent.borrow().upgrade());
+    println!("branch's count value is:{}", Rc::weak_count(&branch));
+}
+
+fn show_weak_count () {
+    let leaf = Rc::new(Node02 {
+        value:3,
+        parent: RefCell::new(Weak::new()),
+        children:RefCell::new(vec![]),
+    });
+    println!("1 leaf strong={};weak={}", Rc::strong_count(&leaf), Rc::weak_count(&leaf));
+    {
+        let branch = Rc::new(Node02{
+            value:5,
+            parent: RefCell::new(Weak::new()),
+            children:RefCell::new(vec![Rc::clone(&leaf)]),
+        });
+        println!("2 branch strong={};weak={}", Rc::strong_count(&branch), Rc::weak_count(&branch));
+        *leaf.parent.borrow_mut() = Rc::downgrade(&branch);
+        println!("3 branch strong={};weak={}", Rc::strong_count(&branch), Rc::weak_count(&branch));
+    }
+    println!("4 leaf strong={};weak={}", Rc::strong_count(&leaf), Rc::weak_count(&leaf));
+}
 
 
 /*
@@ -151,6 +219,15 @@ pub fn combine_rc_and_refcell() {
 ```
 
 * `RefCell<T>` 的运行时借用规则检查也确实保护我们免于出现数据竞争，而且我们也决定牺牲一些速度来换取数据结构的灵活性。
+
+## Weak<T>
+* 在实际编码过程中，创建引用循环并不容易，但也不是不可能。
+* 如果你有包含 Rc<T> 的 RefCell<T> 值或类似的嵌套结合了内部可变性和引用计数的类型，请务必小心确保你没有形成一个引用循环；你无法指望 Rust 帮你捕获它们。
+* 创建引用循环是一个程序上的逻辑 bug，你应该使用自动化测试、代码评审和其他软件开发最佳实践来使其最小化。
+* 为了避免引用循环，可以使用 `Weak<T>`
+* 类似于 Rc<T> 的 Rc::clone 可以使其引用（strong_count）增加，Weak<T> 则可以使用 Rc::downgrade 来将其“弱引用”（weak_count）增加
+* 区别在于 weak_count 无需计数为 0 就能使 Rc 实例被清理
+* 强引用代表如何共享 Rc<T> 实例的所有权。弱引用并不代表所有权关系。他们不会造成引用循环
 
 
 */
