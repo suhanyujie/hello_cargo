@@ -18,11 +18,7 @@ impl Post {
 
     /// 只允许 Draft 状态时编辑文章的方案实现
     pub fn add_text(&mut self, text: &str) {
-        let state;
-        {
-            state = self.state.as_ref().unwrap();
-        }
-        state.add_text(self, text);
+        self.state.as_ref().unwrap().add_text(&mut self.content, text);
     }
 
     /// 此时，该方法委托调用 State 的 content 方法
@@ -37,7 +33,7 @@ trait State {
     fn content<'a>(&self, post: &'a Post) -> &'a str {
         ""
     }
-    fn add_text<'a>(&self, post: &'a mut Post, text: &str) {
+    fn add_text<'a>(&self, post: &'a mut String, text: &str) {
 
     }
 }
@@ -53,8 +49,8 @@ impl State for Draft {
         self
     }
 
-    fn add_text<'a>(&self, post: &'a mut Post, text: &str) {
-        post.content.push_str(text);
+    fn add_text<'a>(&self, post_content: &'a mut String, text: &str) {
+        post_content.push_str(text);
     }
 }
 
@@ -88,9 +84,15 @@ impl State for Published {
 
 fn demo1_for_post() {
     let mut post = Post::new();
-    post.add_text("this is a demo post...");
+    post.add_text("Draft 时更新内容 this is a demo post...");
+    println!("{:#?}", &post.content());
     post.state = Some(post.state.unwrap().request_review());
+    post.add_text("PendingReview 后更新内容 this is a demo post...");
+    println!("{:#?}", &post.content());
     post.state = Some(post.state.unwrap().approve());
+    post.add_text("Published 后更新内容 this is a demo post...");
+    // 最后一次打印 Draft 时更新内容 this is a demo post...
+    // PendingReview 或 Published 状态时更新内容是无效的。符合预期
     println!("{:#?}", &post.content());
 }
 
