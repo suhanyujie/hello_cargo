@@ -1,6 +1,21 @@
-## 知识点
-### build
+# hello Rust/Cargo
+
+## index
+* [字符串](./src/study/string.rs)
+* [Option 枚举](./src/study/option.rs)
+* [hashmap](./src/study/hashmap.rs)
+* [match](./src/study/match.rs)
+* [所有权](./src/study/ownership.rs)
+* [迭代器](./src/study/iterator.rs)
+* [闭包](./src/study/closures.rs)
+* [生命周期](./src/study/lifetime.rs)
+* [trait](./src/study/trait.rs)
+* [线程](./src/study/thread.rs)
+
+## build
 * `rustc src/study/ownership.rs -o a.out`
+
+## 知识点
 
 ### run
 * `./a.out`
