@@ -1,5 +1,6 @@
 use std::thread;
 use std::time::Duration;
+use std::sync::{Mutex, Arc};
 
 fn main() {
     // 创建线程
@@ -11,7 +12,11 @@ fn main() {
     // 不使用 move 闭包尝试
     // not_move();
     // 使用 move 闭包，使闭包中可以获取上下文环境信息
-    using_move();
+    // using_move();
+
+    // get_lock_and_update();
+
+    update_in_multiple_threads();
 }
 
 fn create_thread(){
@@ -60,6 +65,35 @@ fn using_move(){
         println!("v's value is: {:?}", v);
     });
     handle.join().unwrap();
+}
+
+// 线程间的数据竞争
+// 任意时刻，其只允许一个线程访问某些数据。为了访问互斥器中的数据，线程首先需要通过获取互斥器的 锁（lock）来表明其希望访问数据。
+fn get_lock_and_update() {
+    let data1 = Mutex::new(5);
+    {
+        let mut num = data1.lock().unwrap();
+        *num = 6;
+    }
+    println!("{:?}", data1);
+}
+
+// 如果要将数据能被 move 进多个线程中，需要用 Arc 将数据包装一下
+fn update_in_multiple_threads() {
+    let counter = Arc::new(Mutex::new(5));
+    let mut handles = vec![];
+    for i in 1..=5 {
+        let counter = Arc::clone(&counter);
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+            *num += 1;
+        });
+        handles.push(handle);
+    }
+    for handle in handles {
+        handle.join().unwrap();
+    }
+    println!("the result is:{}", *counter.lock().unwrap());
 }
 
 /*
@@ -144,5 +178,11 @@ fn using_move(){
 ```
 
 * 通过告诉 Rust 将 v 的所有权移动到新建线程，我们向 Rust 保证主线程不会再使用 v，如果对 v 修改，那么当在主线程中使用 v 时就会违反所有权规则
+
+### 线程间的数据竞争
+
+
+## 参考
+* Rust 编程语言-无畏并发 https://kaisery.github.io/trpl-zh-cn/ch16-00-concurrency.html
 
 */
