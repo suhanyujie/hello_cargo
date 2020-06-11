@@ -12,13 +12,17 @@
 * [trait](./src/study/trait.rs)
 * [线程](./src/study/thread.rs)
 
-## build
-* `rustc src/study/ownership.rs -o a.out`
+## Usage
 
-## 知识点
+### build
+* `rustc src/study/ownership.rs -o a.out`
 
 ### run
 * `./a.out`
+* 编译并运行
+    * 以 ownership.rs  文件为例：`./run.sh src/study/ownership.rs`
+
+## 知识点 todo
 
 ### 所有权
 * 在堆上创建字符串：`let str1 = String::from("hello world")`
