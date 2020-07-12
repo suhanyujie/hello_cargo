@@ -6,3 +6,4 @@ a.pdb
 /.idea
 /src/study/test_note/target
 /src/study/minigrep/target
+.DS_Store
