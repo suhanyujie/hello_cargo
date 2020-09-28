@@ -1,22 +1,25 @@
+use std::string::String;
+
 fn main() {
     // 字符串的创建：
-    println!("\n字符串的创建：");
-    create_string();
-    create_string2();
+    // println!("\n字符串的创建：");
+    // create_string();
+    // create_string2();
     // 字符串的拼接
-    println!("\n字符串的拼接：");
-    string_concat();
-    println!("\n通过push_str附加字符串：");
-    add_str_by_push_str();
-    println!("\n通过push附加字符：");
-    add_str_by_push();
-    println!("\n通过format!拼接字符串：");
-    concat_str_by_format();
-    println!("\n字符串slice：");
-    str_slice();
-    println!("\n字符串的遍历：");
-    foreach_str();
-
+    // println!("\n字符串的拼接：");
+    // string_concat();
+    // println!("\n通过push_str附加字符串：");
+    // add_str_by_push_str();
+    // println!("\n通过push附加字符：");
+    // add_str_by_push();
+    // println!("\n通过format!拼接字符串：");
+    // concat_str_by_format();
+    // println!("\n字符串slice：");
+    // str_slice();
+    // println!("\n字符串的遍历：");
+    // foreach_str();
+    // Rust 中一个字符的大小
+    about_char();
 }
 
 // 方式1 新建字符串 `#[warn(unused_assignments)]`的作用是让编译器忽略一些warning
@@ -82,6 +85,20 @@ fn foreach_str() {
     for str in s.bytes() {
         println!("{}", str);
     }
+}
+
+// https://stackoverflow.com/questions/21747136/how-do-i-print-the-type-of-a-variable-in-rust
+fn print_type_of<T>(_: &T) {
+    println!("{}", std::any::type_name::<T>())
+}
+
+// 字符相关
+fn about_char() {
+    let c1 = '国';
+    let s1 = "国";
+    print_type_of(&c1);
+    println!("{}", std::mem::size_of::<char>());
+    println!("{}", std::mem::size_of::<String>());
 }
 
 /*
@@ -181,7 +198,10 @@ for str in s.bytes() {
 }
 ```
 
-* 这样使用时，得注意：有效的 `Unicode` 标量值可能会由不止一个字节组成
+这样使用时，得注意：有效的 `Unicode` 标量值可能会由不止一个字节组成。
+Rust 中 char 类型占用的是 4 个字节，也就是一个 `Unicode` 标量值的大小。
+
+
 
 
 */
