@@ -1,7 +1,7 @@
 use std::io::Result;
 
-use super::command::{Command,ListCommand};
-use super::service::{add,done,list_all,list_completed,list_pending};
+use super::command::{Command, ListCommand};
+use super::service::{add, done, list_all, list_completed, list_pending};
 
 pub fn handle(command: Command) -> Result<()> {
     match command {
@@ -17,5 +17,3 @@ pub fn handle(command: Command) -> Result<()> {
         Command::Done { id } => done(id),
     }
 }
-
-

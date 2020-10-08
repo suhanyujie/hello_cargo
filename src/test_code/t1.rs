@@ -10,7 +10,7 @@ mod tests {
         let bytes1 = (289 as i32).to_be_bytes();
         assert_eq!([0, 0, 1, 33], bytes1);
         // 字符转字节
-        let s1 =  '你'.to_string();
+        let s1 = '你'.to_string();
         let bytes1 = s1.as_bytes();
         assert_eq!([228, 189, 160], bytes1);
         // 字符串转字节

@@ -38,7 +38,7 @@ fn main() -> Result<()> {
     slice_show(&s3);
 
     // debug变量的宏
-    println!("{}",s3);
+    println!("{}", s3);
 
     // todo list命令行版
     if false {
@@ -65,28 +65,28 @@ fn slice_show(s: &str) {
 }
 
 //eg:传入字符串slice，返回字符串slice slice是字符串的部分引用
-fn first_word2(s:&str)->&str{
+fn first_word2(s: &str) -> &str {
     let bytes = s.as_bytes();
-    for (i,&item) in bytes.iter().enumerate()  {
+    for (i, &item) in bytes.iter().enumerate() {
         if item == b' ' {
-            return &s[0..i]
+            return &s[0..i];
         }
     }
     &s[..]
 }
 
-fn first_word(s:&String)->&str{
+fn first_word(s: &String) -> &str {
     let bytes = s.as_bytes();
-    for (i,&item) in bytes.iter().enumerate()  {
+    for (i, &item) in bytes.iter().enumerate() {
         if item == b' ' {
-            return &s[0..i]
+            return &s[0..i];
         }
     }
     &s[..]
 }
 
 // slice
-fn about_slice(){
+fn about_slice() {
     let s1 = String::from("hello world!");
     let s1_1 = &s1[0..5];
     let s1_2 = &s1[4..];
@@ -97,24 +97,24 @@ fn about_slice(){
 }
 
 // 所有权移出当前函数
-fn ownership_change()->String{
+fn ownership_change() -> String {
     let s1 = String::from("this is a string...");
     s1
 }
 
 // 可变引用
-fn mutable_ref_example(s:&mut String){
-    //改变字符串 
+fn mutable_ref_example(s: &mut String) {
+    //改变字符串
     s.push_str("this is append text...\n");
 }
 
 //借用和引用
-fn reference_example(s:&String)->usize{
+fn reference_example(s: &String) -> usize {
     s.len()
 }
 
 // 多返回值问题
-fn multipleReturnVal(s:String)->(String, usize){
+fn multipleReturnVal(s: String) -> (String, usize) {
     let x = s.len();
     (s, x)
 }
@@ -127,13 +127,13 @@ fn copyDeeply() {
     println!("the return value is:{}\n", x1);
 }
 
-//语句和表达式的区别 
-fn five()->i32{
+//语句和表达式的区别
+fn five() -> i32 {
     // 语句
-    let a = 5+5;
+    let a = 5 + 5;
     println!("a value is {}\n", a);
     // 表达式
-    5+4
+    5 + 4
 }
 
 // fn guess_number() {

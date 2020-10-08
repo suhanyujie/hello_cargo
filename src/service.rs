@@ -1,57 +1,55 @@
-use std::fs::{create_dir_all,OpenOptions};
-use std::io::{Error,ErrorKind,Read,Result,Seek,SeekFrom,Write};
+use std::fs::{create_dir_all, OpenOptions};
+use std::io::{Error, ErrorKind, Read, Result, Seek, SeekFrom, Write};
 use std::path::Path;
 
-use serde_derive::{Deserialize,Serialize};
+use serde_derive::{Deserialize, Serialize};
 
-use bincode::{deserialize,serialize};
-use prettytable::{cell,format,row,Cell,Row,Table};
+use bincode::{deserialize, serialize};
+use prettytable::{cell, format, row, Cell, Row, Table};
 
-const DIR_NAME:&str = "todos";
+const DIR_NAME: &str = "todos";
 
-const PENDING_FILE:&str="pending.todo";
-const COMPLETED_FILE:&str = "complete.todo";
-const COUNTER_FILE:&str = "counter.todo";
+const PENDING_FILE: &str = "pending.todo";
+const COMPLETED_FILE: &str = "complete.todo";
+const COUNTER_FILE: &str = "counter.todo";
 
-#[derive(Serialize,Deserialize,Debug)]
-struct Todo{
-    id:u64,
-    name:String,
+#[derive(Serialize, Deserialize, Debug)]
+struct Todo {
+    id: u64,
+    name: String,
 }
 
 impl PartialEq for Todo {
-    fn eq (&self, other:&Todo)->bool {
+    fn eq(&self, other: &Todo) -> bool {
         self.id == other.id
     }
 }
 
-pub fn add(name: String)-> Result<()> {
+pub fn add(name: String) -> Result<()> {
     let mut todos = read_file(PENDING_FILE)?;
     todos.push(Todo {
-        id:read_counter()?,
+        id: read_counter()?,
         name,
     });
 
     write_file(PENDING_FILE, todos)
 }
 
-
-
-pub fn done(id:u64) -> Result<()> {
+pub fn done(id: u64) -> Result<()> {
     let mut pending_todos = read_file(PENDING_FILE)?;
-    match pending_todos.iter().position(|todo|todo.id == id) {
-        None=>Err(Error::new(
+    match pending_todos.iter().position(|todo| todo.id == id) {
+        None => Err(Error::new(
             ErrorKind::InvalidInput,
             "Not todo found with given ID",
         )),
-        Some(index)=>{
+        Some(index) => {
             let todo = pending_todos.remove(index);
-            write_file(PENDING_FILE,pending_todos)?;
+            write_file(PENDING_FILE, pending_todos)?;
             let mut completed_todos = read_file(COMPLETED_FILE)?;
             completed_todos.push(todo);
 
             write_file(COMPLETED_FILE, completed_todos)
-        },
+        }
     }
 }
 
