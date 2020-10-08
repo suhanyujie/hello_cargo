@@ -2,14 +2,16 @@ use std::io::Result;
 
 use structopt::StructOpt;
 
-use self::command::Command;
-use self::handler::handle;
+use hello_cargo::command::Command;
+use hello_cargo::handler::handle;
+
 // use rand::Rng;
 // use std::cmp::Ordering;
+use hello_cargo::test_code::t1;
 
-mod command;
-mod handler;
-mod service;
+// mod command;
+// mod handler;
+// mod service;
 
 struct User {
     id: i32,
