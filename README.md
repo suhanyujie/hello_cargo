@@ -12,6 +12,10 @@
 * [trait](./src/study/trait.rs)
 * [线程](./src/study/thread.rs)
 
+### 其他
+* 一些测试代码(src/test_code/t1.rs)
+* Rust 中的字串处理(src/rs_string)
+
 ## Usage
 
 ### build
