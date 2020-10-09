@@ -21,14 +21,39 @@ pub fn rm_string_duplicates<'a>(elements: &mut Vec<&'a str>) -> Vec<&'a str> {
 }
 
 /// 数组中查找指定值。
-pub fn contains(arr: Vec<&str>, needle: &str) -> bool {
+pub fn contains(arr: &Vec<&str>, needle: &str) -> bool {
     for ele in arr {
-        if needle == ele {
+        if needle == *ele {
             return true;
         }
     }
 
     return false;
+}
+
+pub fn permute_case<'a>(input: &'a str) -> Vec<String> {
+    let l = input.len();
+    // 最多的可能性
+    let max = 1 << l;
+    let mut conbinations: Vec<String> = Vec::with_capacity(max);
+    let mut i = 0;
+    // 声明好字符串数组，用于存放创建的字符串
+    while i < max {
+        let mut tmp_str: String = String::new();
+        for (idx, val) in input.char_indices() {
+            if i & (1 << idx) == 0 {
+                tmp_str += &val.to_uppercase().to_string();
+            } else {
+                tmp_str += &val.to_lowercase().to_string();
+            }
+        }
+        {
+            conbinations.push(tmp_str);
+        }
+        i += 1;
+    }
+
+    return conbinations;
 }
 
 #[cfg(test)]
@@ -45,7 +70,15 @@ mod tests {
     #[test]
     fn test_contains() {
         let a1 = vec!["s1", "s2", "s3", "s4", "s1"];
-        let res = contains(a1, "s2");
+        let res = contains(&a1, "s2");
         assert_eq!(true, res);
+        assert_eq!(false, contains(&a1, "hello"));
+    }
+
+    #[test]
+    fn test_permute_case() {
+        let res = permute_case("abc");
+        // assert_eq!(vec!["abc", "acb", "bac", "cab", "cba"], res);
+        assert_eq!(vec!["ABC", "aBC", "AbC", "abC", "ABc", "aBc", "Abc", "abc"], res);
     }
 }
