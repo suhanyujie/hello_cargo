@@ -31,6 +31,8 @@ pub fn contains(arr: &Vec<&str>, needle: &str) -> bool {
     return false;
 }
 
+/// 字符串的驼峰排列组合。
+/// 例如输入 `abc`，则输出为 `"ABC", "aBC", "AbC", "abC", "ABc", "aBc", "Abc", "abc"` 组成的数组。
 pub fn permute_case<'a>(input: &'a str) -> Vec<String> {
     let l = input.len();
     // 最多的可能性
@@ -54,6 +56,24 @@ pub fn permute_case<'a>(input: &'a str) -> Vec<String> {
     }
 
     return conbinations;
+}
+
+/// 检查输入的基于 utf-8 的字符串是否是空格字符。
+/// 空格字符包含：`\t`, `\n`, `\v`, `\f`, `\r`, `' '`, U+0085 (NEL), U+00A0 (NBSP)。
+pub fn is_space(first_byte: u8, next_byte: u8) -> bool {
+    match first_byte {
+        _n @ 9..=13 => return true,// \t, \n, \f, \r
+        32 => return true,// SPACE
+        194 => {
+            if next_byte == 133 {// NEL
+                return true
+            } else if next_byte == 160 {// NBSP
+                return true;
+            }
+        },
+        _ => return false,
+    }
+    return false;
 }
 
 #[cfg(test)]
@@ -80,5 +100,12 @@ mod tests {
         let res = permute_case("abc");
         // assert_eq!(vec!["abc", "acb", "bac", "cab", "cba"], res);
         assert_eq!(vec!["ABC", "aBC", "AbC", "abC", "ABc", "aBc", "Abc", "abc"], res);
+    }
+
+    #[test]
+    fn test_is_space() {
+        // 32 代表空格:`' '`
+        assert!(is_space(32, 0));
+        assert!(!is_space(33, 98));
     }
 }
